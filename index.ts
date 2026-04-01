@@ -4,6 +4,7 @@ import cors from "cors";
 import morgan from "morgan";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
+import authRoutes from "./routes/auth.route";
 
 const app = express();
 
@@ -32,6 +33,8 @@ app.use(
 app.use(express.urlencoded({ limit: "100mb", extended: true }));
 app.use(express.json({ limit: "100mb" }));
 app.set("trust proxy", 1);
+
+app.use("/api/auth", authRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello, World!");
