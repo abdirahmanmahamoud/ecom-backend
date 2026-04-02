@@ -11,7 +11,7 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
 
     /* Modules */
-    // "rootDir": "./src" /* Specify the root folder within your source files. */,
+    "rootDir": "." /* Specify the root folder within your source files. */,
     "outDir": "./dist" /* Specify the output folder for all emitted files. */
 
     /* Optional: Add paths or aliases if needed */
