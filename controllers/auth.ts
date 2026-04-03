@@ -90,3 +90,31 @@ export const login = async (req: Request, res: Response) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+export const session = async (req: Request, res: Response) => {
+  try {
+    const user = req.user;
+
+    const sessionUser = await db.user.findUnique({
+      where: {
+        id: user?.id,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        phone: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    return res.status(200).json({
+      message: "Session retrieved successfully",
+      user: sessionUser,
+    });
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
+};
