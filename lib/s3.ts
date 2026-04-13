@@ -1,5 +1,9 @@
 import "dotenv/config";
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import {
+  PutObjectCommand,
+  S3Client,
+  DeleteObjectCommand,
+} from "@aws-sdk/client-s3";
 import crypto from "crypto";
 
 const s3 = new S3Client({
@@ -28,6 +32,21 @@ export const uploadImageToS3 = async (file: any, key?: string) => {
       url: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${uploadKey}`,
       key: uploadKey,
     };
+  } catch (error: any) {
+    return error.message;
+  }
+};
+
+export const deleteImageFromS3 = async (key: string) => {
+  try {
+    const command = new DeleteObjectCommand({
+      Bucket: process.env.AWS_BUCKET_NAME,
+      Key: key,
+    });
+
+    const response = await s3.send(command);
+
+    return response;
   } catch (error: any) {
     return error.message;
   }
