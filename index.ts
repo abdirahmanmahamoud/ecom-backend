@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.route";
 import categoryRoutes from "./routes/category.route";
+import productRoutes from "./routes/product.route";
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.set("trust proxy", 1);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/category", categoryRoutes);
+app.use("/api/product", productRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello, World!");

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { ProductType } from "../schemas/product";
-import { uploadImageToS3 } from "../lib/s3";
+import { deleteImageFromS3, uploadImageToS3 } from "../lib/s3";
 import { db } from "../lib/db";
 
 export const createProduct = async (req: Request, res: Response) => {
@@ -122,6 +122,44 @@ export const getProductBySlug = async (req: Request, res: Response) => {
       },
     });
     return res.status(200).json({ product });
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const deleteProduct = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params as { id: string };
+
+    const product = await db.product.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    product.imageKey.forEach(async (key) => {
+      await deleteImageFromS3(key);
+    });
+
+    await db.product.delete({
+      where: {
+        id,
+      },
+    });
+    return res.status(200).json({ message: "Product deleted successfully" });
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const updateProduct = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params as { id: string };
+    // TODO: update product
   } catch (error: any) {
     return res.status(500).json({ message: error.message });
   }
